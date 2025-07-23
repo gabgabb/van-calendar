@@ -1,0 +1,13 @@
+{
+    "endOfLine": "auto",
+    "tabWidth": 4,
+    "useTabs": false,
+    "tailwindFunctions": [
+        "clsx",
+        "cn"
+    ],
+    "plugins": [
+        "prettier-plugin-tailwindcss"
+    ],
+    "semi": true
+}

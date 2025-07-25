@@ -3,9 +3,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { addDays, startOfWeek } from "date-fns";
 import { useStationStore } from "@/store/station";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Booking } from "@/lib/types";
 import CalendarGrid from "@/components/CalendarGrid";
+import Navigations from "@/components/Navigations";
 
 const CalendarView: React.FC = () => {
     const selectedStation = useStationStore((s) => s.selectedStation);
@@ -40,26 +40,10 @@ const CalendarView: React.FC = () => {
             )}
             <CalendarGrid days={days} bookings={bookings} />
 
-            <div
-                className={`flex items-center justify-center gap-2 font-bold ${!selectedStation ? "pointer-events-none opacity-30" : ""}`}
-            >
-                <button
-                    onClick={() =>
-                        setCurrentWeekStart((prev) => addDays(prev, -7))
-                    }
-                    className="bg-input hover:bg-input/70 flex h-12 w-24 cursor-pointer items-center justify-center gap-2 rounded-md shadow"
-                >
-                    <ChevronLeft /> Prev
-                </button>
-                <button
-                    onClick={() =>
-                        setCurrentWeekStart((prev) => addDays(prev, 7))
-                    }
-                    className="bg-input hover:bg-input/70 flex h-12 w-24 cursor-pointer items-center justify-center gap-2 rounded-md shadow"
-                >
-                    Next <ChevronRight />
-                </button>
-            </div>
+            <Navigations
+                selectedStation={selectedStation}
+                setCurrentWeekStart={setCurrentWeekStart}
+            />
         </div>
     );
 };

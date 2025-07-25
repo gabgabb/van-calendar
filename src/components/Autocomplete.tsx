@@ -115,7 +115,7 @@ export default function Autocomplete() {
 
     return (
         <Command
-            className="relative flex w-full max-w-md items-center gap-1"
+            className="relative flex w-full max-w-md items-center border font-mono shadow"
             ref={containerRef}
         >
             <div className="flex w-full">
@@ -137,15 +137,15 @@ export default function Autocomplete() {
                 )}
             </div>
 
-            <div className="absolute top-full left-1/2 z-20 mt-2 w-full -translate-x-1/2">
+            <div className="bg-background absolute top-full left-1/2 z-20 w-full -translate-x-1/2 rounded-md border shadow-sm">
                 {loading && hasSearched && (
-                    <div className="bg-background flex justify-center rounded-md border p-4 shadow-md">
+                    <div className="flex justify-center p-2">
                         <Loader2 className="text-chart-3 size-6 animate-spin" />
                     </div>
                 )}
 
                 {!loading && filteredResults.length > 0 && (
-                    <CommandGroup className="bg-background rounded-md border shadow-md">
+                    <CommandGroup>
                         {filteredResults.map((station) => (
                             <CommandItem
                                 key={station.id}
@@ -158,7 +158,7 @@ export default function Autocomplete() {
                 )}
 
                 {!loading && hasSearched && filteredResults.length === 0 && (
-                    <CommandEmpty className="bg-background rounded-md border p-2 shadow-md">
+                    <CommandEmpty className="bg-background rounded-md border p-2">
                         No results found.
                     </CommandEmpty>
                 )}

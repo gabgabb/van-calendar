@@ -8,5 +8,5 @@ export type Booking = {
     startDate: string;
     endDate: string;
     customerName: string;
-    pickupLocation: string;
+    pickupReturnStationId: string;
 };

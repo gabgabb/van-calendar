@@ -1,96 +1,168 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useStationStore } from "@/store/station";
+import { Station } from "@/lib/types";
+import {
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+} from "@/components/ui/command";
+import { Loader2, X } from "lucide-react";
+import { toast } from "sonner";
 
-type Station = {
-    id: string;
-    name: string;
-};
-
-interface AutocompleteProps {
-    onSelect: (station: Station) => void;
-}
-
-export default function Autocomplete({ onSelect }: AutocompleteProps) {
+export default function Autocomplete() {
     const [query, setQuery] = useState("");
     const [results, setResults] = useState<Station[]>([]);
     const [loading, setLoading] = useState(false);
     const [hasSearched, setHasSearched] = useState(false);
+    const hasSelectedRef = useRef(false);
+    const containerRef = useRef<HTMLDivElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    const selectedStation = useStationStore((s) => s.selectedStation);
+    const setStation = useStationStore((s) => s.setStation);
 
     useEffect(() => {
-        if (query.length < 2) return;
+        if (selectedStation?.name) {
+            setQuery(selectedStation.name);
+        }
+    }, [selectedStation]);
 
-        const timer = setTimeout(() => {
+    useEffect(() => {
+        if (query.length < 1) {
+            setResults([]);
+            setHasSearched(false);
+            return;
+        }
+
+        if (query === selectedStation?.name) {
+            return;
+        }
+
+        if (hasSelectedRef.current) {
+            hasSelectedRef.current = false;
+            return;
+        }
+
+        const timeout = setTimeout(() => {
             setLoading(true);
             setHasSearched(true);
 
-            fetch(
-                `${process.env.API_URL}/stations?search=${encodeURIComponent(query)}`,
-            )
-                .then(async (res) => {
-                    if (!res.ok) {
-                        return [];
-                    }
-                    const data = await res.json();
-                    return Array.isArray(data) ? data : [];
-                })
-                .then((data: Station[]) => {
-                    setResults(data);
-                    setLoading(false);
-                })
-                .catch(() => {
-                    setResults([]);
-                    setLoading(false);
-                });
+            const url = `${process.env.API_URL}/stations?search=${encodeURIComponent(query)}`;
+
+            fetch(url)
+                .then((res) => res.json())
+                .then((data) => setResults(Array.isArray(data) ? data : []))
+                .catch(() => setResults([]))
+                .finally(() => setLoading(false));
         }, 300);
 
-        return () => clearTimeout(timer);
-    }, [query]);
+        return () => clearTimeout(timeout);
+    }, [query, selectedStation]);
+
+    const handleSelect = (station: Station) => {
+        setStation(station);
+        setQuery(station.name);
+        setResults([]);
+        setHasSearched(false);
+        hasSelectedRef.current = true;
+    };
+
+    const handleClear = () => {
+        setQuery("");
+        setResults([]);
+        setHasSearched(false);
+        setStation(null);
+        toast.success("Station selection cleared");
+    };
+
+    const handleFocus = () => {
+        if (query.length > 0 && query !== selectedStation?.name) {
+            setHasSearched(true);
+            setLoading(true);
+
+            const url = `${process.env.API_URL}/stations?search=${encodeURIComponent(query)}`;
+
+            fetch(url)
+                .then((res) => res.json())
+                .then((data) => setResults(Array.isArray(data) ? data : []))
+                .catch(() => setResults([]))
+                .finally(() => setLoading(false));
+        }
+    };
+
+    const filteredResults = results.filter((s) => s.id !== selectedStation?.id);
+
+    const handleClickOutside = useCallback((event: MouseEvent) => {
+        if (
+            containerRef.current &&
+            !containerRef.current.contains(event.target as Node)
+        ) {
+            setResults([]);
+            setHasSearched(false);
+        }
+    }, []);
 
     useEffect(() => {
-        if (query.length === 0) {
-            setHasSearched(false);
-            setResults([]);
-        }
-    }, [query]);
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [handleClickOutside]);
 
     return (
-        <div className="relative w-full max-w-md">
-            <input
-                type="text"
-                className="w-full rounded border border-gray-300 p-2"
-                placeholder="Search a station..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-            />
+        <Command
+            className="relative flex w-full max-w-md items-center gap-1"
+            ref={containerRef}
+        >
+            <div className="flex w-full">
+                <CommandInput
+                    ref={inputRef}
+                    placeholder="Search a station..."
+                    value={query}
+                    onValueChange={(val) => setQuery(val)}
+                    onFocus={handleFocus}
+                />
+                {(query || selectedStation) && (
+                    <button
+                        onClick={handleClear}
+                        className="cursor-pointer p-1"
+                        aria-label="Clear"
+                    >
+                        <X size={16} />
+                    </button>
+                )}
+            </div>
 
-            {loading && (
-                <p className="mt-1 text-sm text-gray-500">Loading...</p>
-            )}
+            <div className="absolute top-full left-1/2 z-20 mt-2 w-full -translate-x-1/2">
+                {loading && hasSearched && (
+                    <div className="bg-background flex justify-center rounded-md border p-4 shadow-md">
+                        <Loader2 className="text-chart-3 size-6 animate-spin" />
+                    </div>
+                )}
 
-            {!loading && results.length > 0 && (
-                <ul className="absolute z-10 mt-1 w-full rounded border border-gray-300 bg-white shadow-md">
-                    {results.map((station) => (
-                        <li
-                            key={station.id}
-                            className="cursor-pointer p-2 hover:bg-blue-100"
-                            onClick={() => {
-                                onSelect(station);
-                                setQuery(station.name);
-                                setResults([]);
-                            }}
-                        >
-                            {station.name}
-                        </li>
-                    ))}
-                </ul>
-            )}
+                {!loading && filteredResults.length > 0 && (
+                    <CommandGroup className="bg-background rounded-md border shadow-md">
+                        {filteredResults.map((station) => (
+                            <CommandItem
+                                key={station.id}
+                                onSelect={() => handleSelect(station)}
+                            >
+                                {station.name}
+                            </CommandItem>
+                        ))}
+                    </CommandGroup>
+                )}
 
-            {!loading && hasSearched && results.length === 0 && (
-                <p className="mt-1 text-sm text-gray-500">
-                    No results found for "{query}"
-                </p>
-            )}
-        </div>
+                {!loading && hasSearched && filteredResults.length === 0 && (
+                    <CommandEmpty className="bg-background rounded-md border p-2 shadow-md">
+                        No results found.
+                    </CommandEmpty>
+                )}
+            </div>
+        </Command>
     );
 }

@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { addDays, startOfWeek } from "date-fns";
 import { useStationStore } from "@/store/station";
-import { BookingInstance } from "@/lib/types";
+import { Booking, BookingInstance } from "@/lib/types";
 import CalendarGrid from "@/components/CalendarGrid";
 import Navigations from "@/components/Navigations";
 
@@ -25,7 +25,18 @@ const CalendarView: React.FC = () => {
 
         fetch(`${process.env.API_URL}/stations/${selectedStation.id}`)
             .then((res) => res.json())
-            .then((data) => setBookings(data.bookings || []))
+            .then((data) => {
+                const rawBookings: Booking[] = data.bookings || [];
+
+                const instances: BookingInstance[] = rawBookings.flatMap(
+                    (b) => [
+                        { ...b, type: "start" },
+                        { ...b, type: "end" },
+                    ],
+                );
+
+                setBookings(instances);
+            })
             .catch(() => setBookings([]));
     }, [selectedStation]);
 

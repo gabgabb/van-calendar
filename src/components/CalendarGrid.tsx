@@ -27,8 +27,6 @@ const CalendarGrid: React.FC<Props> = ({ days, bookings }) => {
         });
     };
 
-    console.log(bookings);
-
     const sensors = useSensors(useSensor(PointerSensor));
 
     const handleDragStart = (event: any) => {

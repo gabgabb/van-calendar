@@ -14,3 +14,7 @@ export type Booking = {
 export type BookingInstance = Booking & {
     type: "start" | "end";
 };
+
+export type PendingChange = BookingInstance & {
+    newDate: string;
+};

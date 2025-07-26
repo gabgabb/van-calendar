@@ -16,6 +16,7 @@ import {
     getBookingInstance,
 } from "../hooks/calendar-dnd-utils";
 import { useCalendarDnD } from "../hooks/calendar-dnd-handlers";
+import ConfirmDialog from "@/components/booking/ConfirmDialog";
 
 type Props = {
     days: Date[];
@@ -30,6 +31,9 @@ const CalendarGrid: React.FC<Props> = ({ days, bookings }) => {
         handleDragStart,
         handleDragOver,
         handleDragEnd,
+        confirmChange,
+        pendingChange,
+        cancelChange,
     } = useCalendarDnD(bookings);
 
     const sensors = useSensors(
@@ -57,6 +61,13 @@ const CalendarGrid: React.FC<Props> = ({ days, bookings }) => {
                         overId={overId}
                     />
                 ))}
+                {pendingChange && (
+                    <ConfirmDialog
+                        cancelChange={cancelChange}
+                        confirmChange={confirmChange}
+                        pendingChange={pendingChange}
+                    />
+                )}
             </div>
             <DragOverlay>
                 {activeId &&

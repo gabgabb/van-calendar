@@ -4,7 +4,7 @@ import Autocomplete from "@/components/Autocomplete";
 import { useStationStore } from "@/store/station";
 import { toast } from "sonner";
 import { useEffect, useRef } from "react";
-import CalendarView from "@/components/CalendarView";
+import CalendarView from "@/components/booking/CalendarView";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Home() {

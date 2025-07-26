@@ -1,39 +1,20 @@
+// BookingCard.tsx
 "use client";
 
 import React from "react";
 import { BookingInstance } from "@/lib/types";
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
+import { useBookingSortable } from "../hooks/useBookingSortable";
 
-type Props = {
+interface Props {
     booking: BookingInstance;
     handleClick?: (booking: BookingInstance) => void;
     isDragging?: boolean;
-};
+}
 
 const BookingCard: React.FC<Props> = ({ booking, handleClick, isDragging }) => {
     const id = `${booking.id}-${booking.type}`;
-
-    const {
-        attributes,
-        listeners,
-        setNodeRef,
-        transform,
-        transition,
-        isDragging: sortableDragging,
-    } = useSortable({
-        id,
-        data: {
-            type: booking.type,
-            bookingId: booking.id,
-        },
-    });
-
-    const style = {
-        transform: CSS.Transform.toString(transform),
-        transition,
-        zIndex: 5,
-    };
+    const { setNodeRef, attributes, listeners, style, sortableDragging } =
+        useBookingSortable(id, booking);
 
     const color = booking.type === "start" ? "bg-green-500" : "bg-red-500";
 

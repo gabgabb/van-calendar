@@ -4,8 +4,9 @@ import React, { useEffect, useMemo, useState } from "react";
 import { addDays, startOfWeek } from "date-fns";
 import { useStationStore } from "@/store/station";
 import { Booking, BookingInstance } from "@/lib/types";
-import CalendarGrid from "@/components/CalendarGrid";
+import CalendarGrid from "@/components/booking/CalendarGrid";
 import Navigations from "@/components/Navigations";
+import CalendarSkeleton from "@/components/skeletons/CalendarSkeleton";
 
 const CalendarView: React.FC = () => {
     const selectedStation = useStationStore((s) => s.selectedStation);
@@ -14,6 +15,7 @@ const CalendarView: React.FC = () => {
         startOfWeek(new Date(), { weekStartsOn: 1 }),
     );
     const [bookings, setBookings] = useState<BookingInstance[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
 
     const days = useMemo(
         () => Array.from({ length: 7 }, (_, i) => addDays(currentWeekStart, i)),
@@ -21,8 +23,8 @@ const CalendarView: React.FC = () => {
     );
 
     useEffect(() => {
-        if (!selectedStation) return;
-
+        setIsLoading(true);
+        if (!selectedStation) return setIsLoading(false);
         fetch(`${process.env.API_URL}/stations/${selectedStation.id}`)
             .then((res) => res.json())
             .then((data) => {
@@ -37,19 +39,25 @@ const CalendarView: React.FC = () => {
 
                 setBookings(instances);
             })
-            .catch(() => setBookings([]));
+            .catch(() => setBookings([]))
+            .finally(() => setIsLoading(false));
     }, [selectedStation]);
 
     return (
         <div className="relative space-y-6 rounded-md p-4 font-mono">
+            {isLoading ? (
+                <CalendarSkeleton days={days} />
+            ) : (
+                <CalendarGrid days={days} bookings={bookings} />
+            )}
+
             {!selectedStation && (
-                <div className="absolute inset-0 z-10 flex items-center justify-center backdrop-blur-xs">
+                <div className="bg-background/70 absolute inset-0 z-10 flex items-center justify-center backdrop-blur-sm">
                     <p className="text-center text-lg font-semibold">
                         Please select a station to view the calendar.
                     </p>
                 </div>
             )}
-            <CalendarGrid days={days} bookings={bookings} />
 
             <Navigations
                 selectedStation={selectedStation}

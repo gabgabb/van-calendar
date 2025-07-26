@@ -1,19 +1,54 @@
+"use client";
+
 import React from "react";
 import { BookingInstance } from "@/lib/types";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 type Props = {
     booking: BookingInstance;
     handleClick?: (booking: BookingInstance) => void;
+    isDragging?: boolean;
 };
 
-const BookingCard: React.FC<Props> = ({ booking, handleClick }) => {
+const BookingCard: React.FC<Props> = ({ booking, handleClick, isDragging }) => {
+    const id = `${booking.id}-${booking.type}`;
+
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isDragging: sortableDragging,
+    } = useSortable({
+        id,
+        data: {
+            type: booking.type,
+            bookingId: booking.id,
+        },
+    });
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+        zIndex: 5,
+    };
+
     const color = booking.type === "start" ? "bg-green-500" : "bg-red-500";
 
     return (
         <li
-            key={booking.id}
-            onClick={() => (handleClick ? handleClick(booking) : null)}
-            className="flex w-max cursor-pointer items-center gap-2 rounded-md border px-2 py-1 transition-transform duration-150 hover:scale-103 hover:opacity-90 hover:shadow"
+            ref={setNodeRef}
+            style={style}
+            {...attributes}
+            {...listeners}
+            onClick={() => {
+                if (!sortableDragging && handleClick) handleClick(booking);
+            }}
+            className={`flex w-max cursor-pointer items-center gap-2 rounded-md border bg-white px-2 py-1 transition-transform duration-150 select-none hover:scale-103 hover:opacity-90 hover:shadow ${
+                isDragging ? "opacity-30" : ""
+            }`}
         >
             <span className={`size-2 animate-pulse rounded-full ${color}`} />
             <span className="w-32 truncate">{booking.customerName}</span>

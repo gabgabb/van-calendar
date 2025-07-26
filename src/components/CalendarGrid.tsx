@@ -1,5 +1,5 @@
 import CalendarDay from "./CalendarDay";
-import { Booking } from "@/lib/types";
+import { BookingInstance } from "@/lib/types";
 import { format } from "date-fns";
 import React, { useState } from "react";
 import {
@@ -12,22 +12,22 @@ import {
 
 type Props = {
     days: Date[];
-    bookings: Booking[];
+    bookings: BookingInstance[];
 };
 
 const CalendarGrid: React.FC<Props> = ({ days, bookings }) => {
     const [activeId, setActiveId] = useState();
 
     const bookingsForDay = (day: Date) => {
+        const dayStr = format(day, "MM-dd");
+
         return bookings.filter((b) => {
-            const start = new Date(b.startDate);
-            const end = new Date(b.endDate);
-            return (
-                format(start, "MM-dd") === format(day, "MM-dd") ||
-                format(end, "MM-dd") === format(day, "MM-dd")
-            );
+            const date = b.type === "start" ? b.startDate : b.endDate;
+            return format(new Date(date), "MM-dd") === dayStr;
         });
     };
+
+    console.log(bookings);
 
     const sensors = useSensors(useSensor(PointerSensor));
 
@@ -37,8 +37,6 @@ const CalendarGrid: React.FC<Props> = ({ days, bookings }) => {
 
         setActiveId(id);
     };
-
-
 
     return (
         <DndContext

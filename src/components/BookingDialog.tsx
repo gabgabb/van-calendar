@@ -6,13 +6,13 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
-import { Booking } from "@/lib/types";
+import { BookingInstance } from "@/lib/types";
 import { format, differenceInCalendarDays, parse } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 type Props = {
-    booking: Booking;
+    booking: BookingInstance;
     onClose: () => void;
 };
 

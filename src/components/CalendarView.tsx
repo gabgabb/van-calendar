@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { addDays, startOfWeek } from "date-fns";
 import { useStationStore } from "@/store/station";
-import { Booking } from "@/lib/types";
+import { BookingInstance } from "@/lib/types";
 import CalendarGrid from "@/components/CalendarGrid";
 import Navigations from "@/components/Navigations";
 
@@ -13,7 +13,7 @@ const CalendarView: React.FC = () => {
     const [currentWeekStart, setCurrentWeekStart] = useState(
         startOfWeek(new Date(), { weekStartsOn: 1 }),
     );
-    const [bookings, setBookings] = useState<Booking[]>([]);
+    const [bookings, setBookings] = useState<BookingInstance[]>([]);
 
     const days = useMemo(
         () => Array.from({ length: 7 }, (_, i) => addDays(currentWeekStart, i)),

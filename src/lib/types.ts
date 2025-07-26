@@ -10,3 +10,7 @@ export type Booking = {
     customerName: string;
     pickupReturnStationId: string;
 };
+
+export type BookingInstance = Booking & {
+    type: "start" | "end";
+};

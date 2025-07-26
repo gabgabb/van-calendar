@@ -1,19 +1,20 @@
 import { format } from "date-fns";
-import { Booking } from "@/lib/types";
+import { BookingInstance } from "@/lib/types";
 import React, { useState } from "react";
 import BookingDialog from "./BookingDialog";
+import BookingCard from "./BookingCard";
 
 type Props = {
     day: Date;
-    bookings: Booking[];
+    bookings: BookingInstance[];
 };
 
 const CalendarDay: React.FC<Props> = ({ day, bookings }) => {
-    const [selectedBooking, setSelectedBooking] = useState<Booking | null>(
-        null,
-    );
+    const [selectedBooking, setSelectedBooking] =
+        useState<BookingInstance | null>(null);
 
-    const handleClick = (booking: Booking) => setSelectedBooking(booking);
+    const handleClick = (booking: BookingInstance) =>
+        setSelectedBooking(booking);
     const hasBookings = bookings.length > 0;
 
     return (
@@ -31,27 +32,13 @@ const CalendarDay: React.FC<Props> = ({ day, bookings }) => {
             {hasBookings ? (
                 <div className="scrollbar-none h-30 overflow-y-auto">
                     <ul className="space-y-1 px-2 py-2 text-sm">
-                        {bookings.map((b) => {
-                            const isStart =
-                                format(new Date(b.startDate), "MM-dd") ===
-                                format(day, "MM-dd");
-                            const color = isStart
-                                ? "bg-green-500"
-                                : "bg-red-500";
-
-                            return (
-                                <li
-                                    key={b.id}
-                                    onClick={() => handleClick(b)}
-                                    className="flex w-max cursor-pointer items-center gap-2 rounded-md border px-2 py-1 transition-transform duration-150 hover:scale-103 hover:opacity-90 hover:shadow"
-                                >
-                                    <span
-                                        className={`size-2 animate-pulse rounded-full ${color}`}
-                                    />
-                                    <span>{b.customerName}</span>
-                                </li>
-                            );
-                        })}
+                        {bookings.map((booking) => (
+                            <BookingCard
+                                key={booking.id}
+                                booking={booking}
+                                handleClick={handleClick}
+                            />
+                        ))}
                     </ul>
                 </div>
             ) : (

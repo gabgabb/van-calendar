@@ -120,7 +120,7 @@ const CalendarGrid: React.FC<Props> = ({ bookings }) => {
                 <div
                     ref={containerRef}
                     onScroll={handleScroll}
-                    className="flex snap-x snap-mandatory space-x-2 overflow-x-auto pb-2"
+                    className="scrollbar-thin flex snap-x snap-mandatory space-x-2 overflow-x-scroll pb-2"
                 >
                     {displayedDays.map((day) => (
                         <div

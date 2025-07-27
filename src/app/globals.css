@@ -121,3 +121,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+.-webkit-overflow-scrolling {
+  -webkit-overflow-scrolling: touch;
+}
+
+@plugin 'tailwind-scrollbar';

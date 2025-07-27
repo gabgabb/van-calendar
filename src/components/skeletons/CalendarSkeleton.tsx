@@ -1,16 +1,14 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import React from "react";
 
-type Props = {
-    days: Date[];
-};
+const CalendarSkeleton: React.FC = () => {
+    const placeholders = Array.from({ length: 7 });
 
-const CalendarSkeleton: React.FC<Props> = ({ days }) => {
     return (
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7">
-            {days.map((day) => (
+            {placeholders.map((_, index) => (
                 <div
-                    key={day.toISOString()}
+                    key={index}
                     className="bg-muted h-40 rounded-md border p-2 shadow-sm"
                 >
                     <Skeleton className="bg-muted-foreground/20 mb-2 h-5 w-3/4 rounded" />

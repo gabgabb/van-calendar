@@ -1,32 +1,27 @@
-import { addDays } from "date-fns";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import React from "react";
+import { Button } from "@/components/ui/button";
 
 type NavigationProps = {
-    selectedStation: any;
-    setCurrentWeekStart: React.Dispatch<React.SetStateAction<Date>>;
+    scrollToWeek: (direction: "prev" | "next") => void;
 };
 
-const Navigations: React.FC<NavigationProps> = ({
-    selectedStation,
-    setCurrentWeekStart,
-}) => {
+const Navigations: React.FC<NavigationProps> = ({ scrollToWeek }) => {
     return (
-        <div
-            className={`flex items-center justify-center gap-2 font-bold ${!selectedStation ? "pointer-events-none opacity-30" : ""}`}
-        >
-            <button
-                onClick={() => setCurrentWeekStart((prev) => addDays(prev, -7))}
-                className="bg-input hover:bg-input/70 flex h-12 w-24 cursor-pointer items-center justify-center gap-2 rounded-md shadow"
+        <div className="mb-2 flex justify-center gap-4">
+            <Button
+                variant={"ghost"}
+                className="hover:bg-accent h-10 rounded-md border px-4 py-2"
+                onClick={() => scrollToWeek("prev")}
             >
-                <ChevronLeft /> Prev
-            </button>
-            <button
-                onClick={() => setCurrentWeekStart((prev) => addDays(prev, 7))}
-                className="bg-input hover:bg-input/70 flex h-12 w-24 cursor-pointer items-center justify-center gap-2 rounded-md shadow"
+                ⬅️ Prev week
+            </Button>
+            <Button
+                variant={"ghost"}
+                className="hover:bg-accent h-10 rounded-md border px-4 py-2"
+                onClick={() => scrollToWeek("next")}
             >
-                Next <ChevronRight />
-            </button>
+                Next week ➡️
+            </Button>
         </div>
     );
 };

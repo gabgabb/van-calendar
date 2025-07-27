@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { BookingInstance, PendingChange } from "@/lib/types";
-import { parse, format, isSameDay } from "date-fns";
+import { parse, format } from "date-fns";
 import { findContainer, getBookingInstance } from "./calendar-dnd-utils";
 import { toast } from "sonner";
 
@@ -31,11 +31,11 @@ export const useCalendarDnD = (bookings: BookingInstance[]) => {
         }
 
         if (type === "start") {
-            return newDateObj <= end;
+            return format(newDateObj, "MM-dd") <= format(end, "MM-dd");
         }
 
         if (type === "end") {
-            return newDateObj >= start;
+            return format(newDateObj, "MM-dd") >= format(start, "MM-dd");
         }
 
         return true;

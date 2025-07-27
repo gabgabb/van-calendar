@@ -8,7 +8,6 @@ on:
 
 jobs:
   test:
-    name: Run Unit Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -19,10 +18,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20
-          cache: 'yarn'
+
+      - name: Enable Corepack
+        run: corepack enable
+
+      - name: Install correct Yarn version
+        run: corepack prepare yarn@4.9.2 --activate
 
       - name: Install dependencies
         run: yarn install
 
-      - name: Run Jest tests
+      - name: Run tests
         run: yarn test

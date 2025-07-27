@@ -54,7 +54,7 @@ const CalendarGrid: React.FC<Props> = ({ bookings }) => {
 
     const sensors = useSensors(
         useSensor(PointerSensor, {
-            activationConstraint: { delay: 200, tolerance: 5 },
+            activationConstraint: { delay: 250, tolerance: 5 },
         }),
     );
 
@@ -120,7 +120,7 @@ const CalendarGrid: React.FC<Props> = ({ bookings }) => {
                 <div
                     ref={containerRef}
                     onScroll={handleScroll}
-                    className="scrollbar-thin flex snap-x snap-mandatory space-x-2 overflow-x-scroll pb-2"
+                    className="scrollbar-thin flex touch-pan-x snap-x snap-mandatory space-x-2 overflow-x-auto pb-2"
                 >
                     {displayedDays.map((day) => (
                         <div

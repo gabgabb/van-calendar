@@ -20,6 +20,7 @@ import {
 import { addDays, format, startOfWeek, subDays } from "date-fns";
 import React, { useRef, useState } from "react";
 import Navigations from "@/components/Navigations";
+import { cn } from "@/lib/utils";
 
 const DAYS_PER_LOAD = 7;
 const INITIAL_WEEKS = 5;
@@ -40,6 +41,7 @@ const CalendarGrid: React.FC<Props> = ({ bookings }) => {
         confirmChange,
         pendingChange,
         cancelChange,
+        isDragging,
     } = useCalendarDnD(bookings);
 
     const containerRef = useRef<HTMLDivElement>(null);
@@ -61,9 +63,14 @@ const CalendarGrid: React.FC<Props> = ({ bookings }) => {
     const scrollToWeek = (direction: "prev" | "next") => {
         if (!containerRef.current) return;
 
+        const container = containerRef.current;
+        const visibleWidth = container.clientWidth;
+
+        const cardsVisible = Math.floor(visibleWidth / CARD_WIDTH);
         const offset = direction === "prev" ? -1 : 1;
-        containerRef.current.scrollBy({
-            left: offset * CARD_WIDTH * 7,
+
+        container.scrollBy({
+            left: offset * cardsVisible * CARD_WIDTH,
             behavior: "smooth",
         });
     };
@@ -120,7 +127,10 @@ const CalendarGrid: React.FC<Props> = ({ bookings }) => {
                 <div
                     ref={containerRef}
                     onScroll={handleScroll}
-                    className="scrollbar-thin flex touch-pan-x snap-x snap-mandatory space-x-2 overflow-x-auto pb-2"
+                    className={cn(
+                        "scrollbar-thin flex touch-pan-x space-x-2 overflow-x-auto pb-2",
+                        isDragging ? "snap-none" : "snap-x snap-mandatory",
+                    )}
                 >
                     {displayedDays.map((day) => (
                         <div

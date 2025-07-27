@@ -11,6 +11,7 @@ export const useCalendarDnD = (bookings: BookingInstance[]) => {
     const [pendingChange, setPendingChange] = useState<PendingChange | null>(
         null,
     );
+    const [isDragging, setIsDragging] = useState(false);
 
     useEffect(() => {
         setInternalBookings(bookings);
@@ -56,6 +57,7 @@ export const useCalendarDnD = (bookings: BookingInstance[]) => {
 
     const handleDragStart = useCallback((event: any) => {
         setActiveId(event.active.id);
+        setIsDragging(true);
     }, []);
 
     const handleDragOver = useCallback((event: any) => {
@@ -71,6 +73,7 @@ export const useCalendarDnD = (bookings: BookingInstance[]) => {
 
             setActiveId(null);
             setOverId(null);
+            setIsDragging(false);
 
             const booking = getBookingInstance(active.id, internalBookings);
             if (!booking) return;
@@ -106,6 +109,9 @@ export const useCalendarDnD = (bookings: BookingInstance[]) => {
             toast.error("Invalid date change. Please check the dates.");
             return;
         }
+
+        const element = document.getElementById(pendingChange.id);
+        element?.scrollIntoView({ behavior: "smooth", inline: "center" });
 
         setInternalBookings((prev) =>
             prev.map((b) =>
@@ -144,5 +150,6 @@ export const useCalendarDnD = (bookings: BookingInstance[]) => {
         handleDragEnd,
         confirmChange,
         cancelChange,
+        isDragging,
     };
 };

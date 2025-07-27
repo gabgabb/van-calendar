@@ -88,9 +88,6 @@ export const useCalendarDnD = (bookings: BookingInstance[]) => {
             if (
                 isSameDayChange(booking, booking.type, overDate.toISOString())
             ) {
-                toast.error(
-                    "Booking dropped on the same day, no change triggered.",
-                );
                 return;
             }
 
@@ -134,7 +131,6 @@ export const useCalendarDnD = (bookings: BookingInstance[]) => {
     };
 
     const cancelChange = () => {
-        console.log("Drag cancelled");
         setPendingChange(null);
     };
 

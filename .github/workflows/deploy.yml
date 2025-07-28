@@ -31,8 +31,8 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
-      - name: Build and export static site
-        run: yarn build && yarn export
+      - name: Build static site
+        run: yarn build
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3

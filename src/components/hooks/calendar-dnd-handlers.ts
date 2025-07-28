@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { BookingInstance, PendingChange } from "@/lib/types";
-import { parse, format } from "date-fns";
+import { parse, format, setYear } from "date-fns";
 import { findContainer, getBookingInstance } from "./calendar-dnd-utils";
 import { toast } from "sonner";
 
@@ -32,11 +32,13 @@ export const useCalendarDnD = (bookings: BookingInstance[]) => {
         }
 
         if (type === "start") {
-            return format(newDateObj, "MM-dd") <= format(end, "MM-dd");
+            const adjustedNewStart = setYear(newDateObj, start.getFullYear());
+            return adjustedNewStart <= end;
         }
 
         if (type === "end") {
-            return format(newDateObj, "MM-dd") >= format(start, "MM-dd");
+            const adjustedNewEnd = setYear(newDateObj, end.getFullYear());
+            return adjustedNewEnd >= start;
         }
 
         return true;
@@ -84,7 +86,12 @@ export const useCalendarDnD = (bookings: BookingInstance[]) => {
                 : findContainer(over.id, internalBookings);
             if (!targetDayId) return;
 
-            const fullDateStr = `${format(new Date(), "yyyy")}-${targetDayId}`;
+            const originalDate =
+                booking.type === "start"
+                    ? new Date(booking.startDate)
+                    : new Date(booking.endDate);
+
+            const fullDateStr = `${format(originalDate, "yyyy")}-${targetDayId}`;
             const overDate = parse(fullDateStr, "yyyy-MM-dd", new Date());
             if (isNaN(overDate.getTime())) return;
 

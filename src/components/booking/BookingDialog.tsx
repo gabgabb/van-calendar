@@ -18,7 +18,6 @@ type Props = {
 };
 
 const BookingDialog: React.FC<Props> = ({ booking, onClose }) => {
-    // Normalize dates to a fake year to avoid issues with year differences
     const normalizeToFakeYear = (dateStr: string) =>
         parse(
             format(new Date(dateStr), "MM-dd"),
@@ -26,9 +25,11 @@ const BookingDialog: React.FC<Props> = ({ booking, onClose }) => {
             new Date("2000-01-01"),
         );
 
-    const duration = differenceInCalendarDays(
-        normalizeToFakeYear(booking.endDate),
-        normalizeToFakeYear(booking.startDate),
+    const duration = Math.abs(
+        differenceInCalendarDays(
+            normalizeToFakeYear(booking.endDate),
+            normalizeToFakeYear(booking.startDate),
+        ),
     );
 
     const [stationName, setStationName] = useState<string | null>(null);

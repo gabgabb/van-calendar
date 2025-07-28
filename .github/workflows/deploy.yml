@@ -16,9 +16,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20
-          cache: yarn
 
-      - name: Enable Corepack (for Yarn 4+)
+      - name: Enable Corepack
         run: corepack enable
 
       - name: Prepare correct Yarn version

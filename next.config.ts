@@ -8,7 +8,6 @@ const nextConfig: NextConfig = {
     env: {
         NEXT_ENV: process.env.NEXT_ENV,
         API_URL: process.env.API_URL,
-        NODE_ENV: process.env.NODE_ENV,
     },
     output: isGithubPages ? "export" : undefined,
     basePath: isGithubPages ? "/van-calendar" : "",

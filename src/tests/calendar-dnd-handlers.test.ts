@@ -76,7 +76,8 @@ describe("useCalendarDnD", () => {
             (b) => b.type === "end",
         );
 
-        expect(format(new Date(updatedEnd?.endDate!), "MM-dd")).toBe("07-30");
+        expect(updatedEnd).toBeDefined();
+        expect(format(new Date(updatedEnd!.endDate), "MM-dd")).toBe("07-30");
     });
 
     it("cancels pending change correctly", () => {

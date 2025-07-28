@@ -18,4 +18,15 @@ describe("BookingCard", () => {
         const dot = screen.getByRole("button").querySelector("span");
         expect(dot).toHaveClass("bg-green-500");
     });
+
+    it("renders red dot for end booking", () => {
+        render(<BookingCard booking={{ ...booking, type: "end" }} />);
+        const dot = screen.getByRole("button").querySelector("span");
+        expect(dot).toHaveClass("bg-red-500");
+    });
+
+    it("has the correct data-booking-id attribute", () => {
+        render(<BookingCard booking={booking} />);
+        expect(screen.getByTestId("booking-card-1")).toBeInTheDocument();
+    });
 });

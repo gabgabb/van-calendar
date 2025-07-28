@@ -38,6 +38,7 @@ const CalendarDay: React.FC<Props> = ({
     return (
         <div
             ref={setNodeRef}
+            data-testid={`calendar-day-${id}`}
             className={`transition-color bg-card hover:bg-card/80 h-40 rounded-md border shadow-sm transition-shadow select-none hover:shadow-lg ${
                 bookings.length ? "" : "text-muted-foreground"
             }`}

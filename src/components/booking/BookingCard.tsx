@@ -23,6 +23,7 @@ const BookingCard: React.FC<Props> = ({ booking, handleClick, isDragging }) => {
             ref={setNodeRef}
             {...attributes}
             {...listeners}
+            data-testid={`booking-card-${booking.id}`}
             onClick={() => {
                 if (!sortableDragging && handleClick) handleClick(booking);
             }}

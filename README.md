@@ -25,6 +25,22 @@
 
 ---
 
+## Design Choices
+
+### Layout & Responsiveness
+
+- **Centered layout** with a max-width container for optimal readability.
+- **Responsive design**, with adaptive typography and touch-friendly spacing.
+- Calendar grid uses flexible height and scrollable content for consistent UX across viewports.
+
+### Interaction & Feedback
+
+- **Drag-and-drop** interactions via `@dnd-kit`, with drop indicators and visual feedback.
+- **Booking details shown in a drawer** to avoid disrupting the calendar layout.
+- Success and error messages are displayed using `sonner` for quick feedback.
+
+---
+
 ## Getting Started Locally
 
 ### Prerequisites
@@ -44,6 +60,8 @@ make test
 ````
 
 ### Open http://localhost:3000 in your browser
+
+---
 
 ## Live Demo
 

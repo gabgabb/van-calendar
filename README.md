@@ -36,6 +36,7 @@
 ### Interaction & Feedback
 
 - **Drag-and-drop** interactions via `@dnd-kit`, with drop indicators and visual feedback.
+   - A short press-and-hold delay is required before dragging begins, to prevent accidental drags on click or tap.
 - **Booking details shown in a drawer** to avoid disrupting the calendar layout.
 - Success and error messages are displayed using `sonner` for quick feedback.
 

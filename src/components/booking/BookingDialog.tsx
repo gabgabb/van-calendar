@@ -3,6 +3,7 @@
 import {
     Dialog,
     DialogContent,
+    DialogDescription,
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog";
@@ -51,6 +52,7 @@ const BookingDialog: React.FC<Props> = ({ booking, onClose }) => {
             <DialogContent className="font-mono">
                 <DialogHeader>
                     <DialogTitle>Booking Details</DialogTitle>
+                    <DialogDescription></DialogDescription>
                 </DialogHeader>
                 <div className="space-y-2 text-sm">
                     <p>

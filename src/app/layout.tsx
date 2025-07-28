@@ -3,6 +3,7 @@ import "./globals.css";
 import React from "react";
 import { Sora, Roboto_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "next-themes";
 
 const sora = Sora({ subsets: ["latin"], variable: "--font-sora" });
 const robotoMono = Roboto_Mono({ subsets: ["latin"], variable: "--font-mono" });
@@ -19,14 +20,18 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
             <body
                 className={`${sora.variable} ${robotoMono.variable} antialiased`}
             >
-                <main>
+                <ThemeProvider
+                    attribute="class"
+                    defaultTheme="system"
+                    enableSystem
+                >
                     {children}
                     <Toaster position={"top-right"} richColors />
-                </main>
+                </ThemeProvider>
             </body>
         </html>
     );

@@ -137,7 +137,7 @@ export default function Autocomplete() {
                 )}
             </div>
 
-            <div className="bg-background absolute top-full left-1/2 z-20 w-full -translate-x-1/2 rounded-md border shadow-sm">
+            <div className="bg-background absolute top-full left-1/2 z-20 w-full -translate-x-1/2 rounded-md shadow-sm">
                 {loading && hasSearched && (
                     <div className="flex justify-center p-2">
                         <Loader2 className="text-chart-3 size-6 animate-spin" />

@@ -31,7 +31,10 @@ export default function Home() {
         <main className="mx-auto flex max-w-[1400px] flex-col gap-10 p-4">
             <div className="mx-auto flex w-full flex-col items-center gap-4 font-mono">
                 {!hasHydrated ? (
-                    <Skeleton className="mb-4 h-8 w-64" />
+                    <div className="flex w-full justify-between">
+                        <Skeleton className="h-9 w-64" />
+                        <Skeleton className="size-8 rounded-full" />
+                    </div>
                 ) : (
                     <div className="flex w-full justify-between">
                         {station ? (

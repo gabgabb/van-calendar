@@ -4,10 +4,10 @@ services:
             context: .
             dockerfile: ./docker/Dockerfile
         ports:
-            - "3000:3000"
+            - "${PORT:-3000}:3000"
         volumes:
             - .:/app
-            - /app/node_modules
         environment:
-            NODE_ENV: development
-        command: yarn dev
+            NODE_ENV: ${NODE_ENV}
+            API_URL: ${API_URL}
+        restart: always

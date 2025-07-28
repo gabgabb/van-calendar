@@ -28,3 +28,9 @@ clean:  ## Clean up docker images, containers, volumes, and networks
 
 install:  ## Install dependencies
 	yarn install
+
+test:  ## Run tests
+	yarn test
+
+lint:  ## Run linter
+	yarn lint

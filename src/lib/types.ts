@@ -1,0 +1,20 @@
+export type Station = {
+    id: string;
+    name: string;
+};
+
+export type Booking = {
+    id: string;
+    startDate: string;
+    endDate: string;
+    customerName: string;
+    pickupReturnStationId: string;
+};
+
+export type BookingInstance = Booking & {
+    type: "start" | "end";
+};
+
+export type PendingChange = BookingInstance & {
+    newDate: string;
+};
